@@ -19,7 +19,7 @@ RSpec.describe "/products", type: :request do
     skip("Add a hash of attributes valid for your model")
   }
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) { { name: '' }
     skip("Add a hash of attributes invalid for your model")
   }
 
@@ -57,9 +57,9 @@ RSpec.describe "/products", type: :request do
   describe "POST /create" do
     context "with valid parameters" do
       it "creates a new Product" do
-        expect {
+        expect do
           post products_url, params: { product: valid_attributes }
-        }.to change(Product, :count).by(1)
+        end.to change(Product, :count).by(1)
       end
 
       it "redirects to the created product" do
@@ -70,14 +70,14 @@ RSpec.describe "/products", type: :request do
 
     context "with invalid parameters" do
       it "does not create a new Product" do
-        expect {
+        expect do
           post products_url, params: { product: invalid_attributes }
-        }.to change(Product, :count).by(0)
+        end.to change(Product, :count).by(0)
       end
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
+      it "renders a successful response with 422 status" do
         post products_url, params: { product: invalid_attributes }
-        expect(response).to be_successful
+        expect(response.status).to eq(422)
       end
     end
   end
