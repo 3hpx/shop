@@ -1,7 +1,9 @@
+# spec/models/product_spec.rb
+
 require 'rails_helper'
 
 RSpec.describe Product, type: :model do
-  context 'when data is valid' do
+  context 'when data provided is valid' do
     let(:params) { { name: 'Sneakers', price: 49.99, quantity: 4 } }
 
     it 'saves the instance' do
@@ -13,15 +15,16 @@ RSpec.describe Product, type: :model do
 
   context 'when data provided is invalid' do
     context 'when name is missing' do
-      let(:params) { { name: '', price: 89.11, quantity: 1 } }
+      let(:params) { { name: '', price: 12.12, quantity: 1 } }
 
       it 'throws an explicit error' do
-        expect { described_class.create!(params) }.to raise_error("Validation failed: Name can't be empty")
+        expect { described_class.create!(params) }.to raise_error("Validation failed: Name can't be blank")
       end
     end
 
     context 'when price is missing' do
       let(:params) { { name: 'product', price: nil, quantity: 1 } }
+
       it 'throws an explicit error' do
         expect { described_class.create!(params) }.to raise_error("Validation failed: Price can't be blank")
       end
@@ -32,6 +35,14 @@ RSpec.describe Product, type: :model do
 
       it 'throws an explicit error' do
         expect { described_class.create!(params) }.to raise_error("Validation failed: Quantity can't be blank")
+      end
+    end
+
+    context 'when all params are missing' do
+      let(:params) { { name: '', price: nil, quantity: nil } }
+
+      it 'throws an explicit error' do
+        expect { described_class.create!(params) }.to raise_error("Validation failed: Name can't be blank, Price can't be blank, Quantity can't be blank")
       end
     end
   end
